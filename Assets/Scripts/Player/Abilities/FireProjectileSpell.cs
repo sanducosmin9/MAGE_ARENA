@@ -54,8 +54,9 @@ public class FireProjectileSpell : MonoBehaviour
 
     private void InstantiateProjectile()
     {
-        var projectileObject = Instantiate(projectile, firePoint.position, Quaternion.identity) as GameObject;
+        var projectileObject = Instantiate(projectile, firePoint.position, firePoint.rotation) as GameObject;
         projectileObject.GetComponent<Rigidbody>().velocity = (destination - firePoint.position).normalized * projectileSpeed;
+
     }
 
     private void OnEnable()

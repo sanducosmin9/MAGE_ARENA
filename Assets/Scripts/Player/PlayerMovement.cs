@@ -19,16 +19,16 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Movement variables")]
     private float moveSpeed;
-    private float baseSpeed = 10f;
-    private float sprintSpeed = 14f;
+    private float baseSpeed = 6f;
+    private float sprintSpeed = 8f;
     private Vector2 moveDirection;
 
     [Header("Jump variables")]
     private bool isGrounded;
-    private float jumpHeight = 6f;
+    private float jumpHeight = 3f;
 
     [Header("Blink variables")]
-    private float blinkDistance = 10f;
+    private float blinkDistance = 6f;
 
 
 

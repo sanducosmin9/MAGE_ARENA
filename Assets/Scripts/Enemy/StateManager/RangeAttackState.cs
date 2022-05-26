@@ -1,65 +1,52 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class RangeAttackState : State
+public abstract class RangeAttackState : BaseState
 {
-    private NavMeshAgent agent;
+    protected NavMeshAgent agent;
+    public Animator animator;
 
-    private State chaseState;
-
-    private bool isPlayerInAttackRange;
-
-    [SerializeField] private GameObject projectile;
-
-    private Transform player;
+    protected Transform player;
     [SerializeField] private LayerMask playerLayer;
 
-    [SerializeField] private Transform firePoint;
+    [SerializeField] protected Transform firePoint;
 
-    private bool hasAttacked = false;
-    private float attackCooldown = 2f;
+    protected float attackCooldown;
+    protected bool canAttack;
+    protected float attackRange;
 
+    protected abstract IEnumerator Attack();
+    protected abstract void SetCooldown();
 
-    private void Start()
+    public override void EnterState(EnemyStateManager manager)
     {
-        chaseState = GetComponent<RangeChaseState>();
         player = GameObject.Find("Player").transform;
         agent = GetComponent<NavMeshAgent>();
+        SetCooldown();
+
+        canAttack = true;
     }
 
-    public override State RunCurrentState()
+    public override void UpdateState(EnemyStateManager manager)
     {
-        isPlayerInAttackRange = Physics.CheckSphere(transform.position, Ranges.rangeAttack, playerLayer);
-
-        if (isPlayerInAttackRange)
+        if (canAttack)
         {
-            AttackPlayer();
-            return this; 
+            canAttack = false;
+            StartCoroutine(Attack());
         }
-        else { return chaseState; }
-    }
 
-    private void AttackPlayer()
-    {
+        Vector3 lookDirection = new Vector3(player.position.x, transform.position.y, player.position.z);
+        transform.LookAt(lookDirection);
         agent.SetDestination(transform.position);
 
-        transform.LookAt(player.position);
-
-        if (!hasAttacked)
+        bool isPlayerInAttackRange = Physics.CheckSphere(transform.position, attackRange, playerLayer);
+        if (!isPlayerInAttackRange)
         {
-            Rigidbody rb = Instantiate(projectile, firePoint.position, Quaternion.identity).GetComponent<Rigidbody>();
-            rb.AddForce(transform.forward * 32f, ForceMode.Impulse);
-
-            hasAttacked = true;
-            Invoke(nameof(ResetAttack), attackCooldown);
+            animator.SetBool("Attack", false);
+            manager.SwitchState(manager.chaseState);
         }
     }
 
-    private void ResetAttack()
-    {
-        hasAttacked = false;
-    }
 }

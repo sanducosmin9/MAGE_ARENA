@@ -11,8 +11,8 @@ public class PlayerHealth : MonoBehaviour
 
     void Start()
     {
-        health = new HealthSystem(100);
-        healthSlider.maxValue = 100;
+        health = new HealthSystem(1000);
+        healthSlider.maxValue = 1000;
         healthSlider.minValue = 0;
     }
 
@@ -28,8 +28,6 @@ public class PlayerHealth : MonoBehaviour
 
             deathScreen.gameObject.SetActive(true);
         }
-
-
         healthSlider.value = health.GetHealth();
     }
 
