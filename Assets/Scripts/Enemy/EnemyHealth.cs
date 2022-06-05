@@ -5,14 +5,19 @@ using UnityEngine.UI;
 
 public class EnemyHealth : MonoBehaviour
 {
+    private Animator animator;
     private HealthSystem health;
     [SerializeField] private Slider healthSlider;
     [SerializeField] private GameObject impactVFX;
+    private bool hasRaged = false;
+    public float maxHealth = 100;
+    public float attackDamage = 25;
 
     void Start()
     {
-        health = new HealthSystem(90);
-        healthSlider.maxValue = 90;
+        animator = GetComponent<Animator>();
+        health = new HealthSystem(maxHealth);
+        healthSlider.maxValue = maxHealth;
         healthSlider.minValue = 0;
     }
 
@@ -38,6 +43,13 @@ public class EnemyHealth : MonoBehaviour
     public void TakeDamage(float amount)
     {
         health.Damage(amount);
+
+        if (!hasRaged && health.isBelowHalf && animator != null)
+        {
+            hasRaged = true;
+            animator.SetTrigger("Rage");
+            animator.SetBool("HasRaged", true);
+        }
     }
 
     public void Heal(float amount)

@@ -15,6 +15,10 @@ public class Projectile : MonoBehaviour
             var enemyHealth = collision.gameObject.GetComponent<EnemyHealth>();
             enemyHealth.TakeDamage(30);
             CreateImpact(collision.contacts[0].point);
+
+            var animator = collision.gameObject.GetComponent<Animator>();
+            if (animator != null)
+                animator.SetTrigger("TakeDamage");
         }
 
         bool canDestroy = !(collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Spell"));

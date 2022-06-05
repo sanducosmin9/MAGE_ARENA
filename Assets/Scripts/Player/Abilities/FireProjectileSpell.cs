@@ -13,6 +13,8 @@ public class FireProjectileSpell : MonoBehaviour
     private GameObject projectile;
     [SerializeField]
     private Transform firePoint;
+    [SerializeField]
+    private Transform playerArm;
 
     private float fireCooldown = 2f;
     private float timeUntilAbleToFire;
@@ -54,7 +56,9 @@ public class FireProjectileSpell : MonoBehaviour
 
     private void InstantiateProjectile()
     {
-        var projectileObject = Instantiate(projectile, firePoint.position, firePoint.rotation) as GameObject;
+        var rotation = Quaternion.LookRotation(new Vector3(destination.x - transform.position.x, destination.y - transform.position.y - 90f, destination.z - transform.position.z));
+        var projectileObject = Instantiate(projectile, firePoint.position, Quaternion.identity) as GameObject;
+        projectileObject.transform.localRotation = rotation;
         projectileObject.GetComponent<Rigidbody>().velocity = (destination - firePoint.position).normalized * projectileSpeed;
 
     }

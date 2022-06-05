@@ -7,6 +7,7 @@ public class HealthSystem
     private float health;
     private float maxHealth;
     public bool isZero = false;
+    public bool isBelowHalf = false;
 
     public HealthSystem(float maxHealth)
     {
@@ -28,6 +29,9 @@ public class HealthSystem
             health = 0;
             isZero = true;
         }
+
+        if(health <= maxHealth / 2)
+            isBelowHalf = true;
     }
 
     public void Heal(float amount)

@@ -17,7 +17,6 @@ public class MouseLook : MonoBehaviour
     private Vector2 mouseLook;
 
     private float xRotation = 0f;
-    private float yRotation = 0f;
 
     private void Awake()
     {
@@ -42,7 +41,6 @@ public class MouseLook : MonoBehaviour
         float mouseY = mouseLook.y * Time.deltaTime * mouseSensitivity;
 
         xRotation -= mouseY;
-        yRotation -= mouseY;    
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
         transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
